@@ -1,6 +1,10 @@
 from dataclasses import dataclass
 from datetime import datetime
 
+@dataclass
+class SimpleCandle:
+    _open: int
+    close: int
 
 @dataclass
 class PortfileAssetData:
@@ -12,12 +16,17 @@ class PortfileAssetData:
     avg_buy_price: int
     date: datetime
     current_price: int
-    candels: list
+    candels: list[SimpleCandle]
 
     @property
     def volatility(self):
-        pass
-  
+        volatility = 0
+        for candle in self.candels:
+            volatility += round(100 * (candle.close - candle._open) / candle._open, 2)
+
+        return round(volatility / len(self.candels), 2)
+
     @property
     def profit(self):
-        pass
+        return round(100 * (self.current_price - self.avg_buy_price) / self.avg_buy_price , 2)
+    

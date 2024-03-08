@@ -2,7 +2,8 @@ from tinkoff.invest import Client, AsyncClient, InstrumentIdType, Instrument, Ge
 
 from datetime import datetime, timedelta
 
-from models import PortfileAssetData
+from models import PortfileAssetData, SimpleCandle
+
 
 class Markovic:
     def __init__(self, token) -> None:
@@ -82,6 +83,10 @@ class Markovic:
                         interval=CandleInterval.CANDLE_INTERVAL_MONTH
                     )
 
+                    simple_historic_data = []
+                    for candle in historic_data.candles:
+                        simple_historic_data.append(SimpleCandle(_open=self.__convert_to_float(candle.open), close=self.__convert_to_float(candle.close)))
+
                     kwargs = {
                         "ticker": ticker,
                         "name": name,
@@ -89,7 +94,7 @@ class Markovic:
                         "avg_buy_price": average_price,
                         "date": date,
                         "current_price": current_price,
-                        "candels": historic_data.candles
+                        "candels": simple_historic_data
                     }
 
                     data_storage.append(PortfileAssetData(**kwargs))
