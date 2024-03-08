@@ -13,7 +13,8 @@ portfel = Markovic(TOKEN)
 
 
 async def main():
-    print(await portfel.get_nessary_data())
+    data = await portfel.get_nessary_data()
+    print(data[0].date)
 
 
 if __name__ == "__main__":
